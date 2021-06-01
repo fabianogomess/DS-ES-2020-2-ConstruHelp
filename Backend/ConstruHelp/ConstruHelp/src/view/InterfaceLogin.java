@@ -83,7 +83,7 @@ public class InterfaceLogin{
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				try {
-				String sql = "SELECT nome, senha FROM pessoa WHERE nome = ? and senha = ?";
+				String sql = "SELECT email, senha FROM pessoa WHERE email = ? and senha = ?";
 				PreparedStatement stmt = con.prepareStatement(sql);
 				stmt.setString(1, txtLogin.getText());
 				stmt.setString(2, txtSenha.getText());
@@ -91,7 +91,7 @@ public class InterfaceLogin{
 				boolean autentifica = false;
 				
 				while(rs.next() && !autentifica) {
-					if(rs.getString("nome").equals(txtLogin.getText())) {
+					if(rs.getString("email").equals(txtLogin.getText())) {
 						if(rs.getString("senha").equals(txtSenha.getText())) {
 							autentifica = true;
 						}	
