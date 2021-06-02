@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 
+import br.com.javatpoint.dao.UsuarioDAO;
 import br.com.javatpoint.factory.ConnectionFactory;
 
 import javax.swing.JButton;
@@ -82,35 +83,18 @@ public class InterfaceLogin{
 		btnNewButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				try {
-				String sql = "SELECT email, senha FROM pessoa WHERE email = ? and senha = ?";
-				PreparedStatement stmt = con.prepareStatement(sql);
-				stmt.setString(1, txtLogin.getText());
-				stmt.setString(2, txtSenha.getText());
-				ResultSet rs = stmt.executeQuery();
-				boolean autentifica = false;
-				
-				while(rs.next() && !autentifica) {
-					if(rs.getString("email").equals(txtLogin.getText())) {
-						if(rs.getString("senha").equals(txtSenha.getText())) {
-							autentifica = true;
-						}	
-					}
-				}
-				
+				UsuarioDAO usuario = new UsuarioDAO();
+				boolean autentifica = usuario.Login(txtLogin.getText(), txtSenha.getText());
 				if(autentifica == true) {
-					JOptionPane.showInternalMessageDialog(null, "Autenticado com sucesso!!");
-					TelaPrincipal tela = new TelaPrincipal();
-					tela.setVisible(true);
-					frame.dispose();
+				JOptionPane.showInternalMessageDialog(null, "Autenticado com sucesso!!");
+				frame.dispose();
+				String cpfUsuario = usuario.cpfRetornado(txtLogin.getText(), txtSenha.getText());
+				TelaPrincipal tela = new TelaPrincipal(cpfUsuario);
+				tela.setVisible(true);
 				}else {
-					JOptionPane.showInternalMessageDialog(null, "Dados incorretos!");
+				JOptionPane.showInternalMessageDialog(null, "Dados incorretos!");
 				}
-				
-				}catch (Exception erroLogin) {
-					JOptionPane.showInternalMessageDialog(null, "Problemas na execução do Login!");
-				}
-			}
+		}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnNewButton.setBounds(204, 407, 104, 30);
@@ -132,9 +116,13 @@ public class InterfaceLogin{
 		frame.getContentPane().add(txtSenha);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\ConstruHelp\\img\\download.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\raul_\\git\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\download.png"));
 		lblNewLabel_1.setBounds(204, 10, 219, 206);
 		frame.getContentPane().add(lblNewLabel_1);
 	}
-
+	
+	public void setVisible() {
+		frame.setVisible(true);
+	}
+	
 }
