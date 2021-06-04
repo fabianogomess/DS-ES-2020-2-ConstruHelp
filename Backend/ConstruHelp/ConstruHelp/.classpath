@@ -52,5 +52,6 @@
 	<classpathentry kind="lib" path="D:/Downloads/Designer de Software/Trabalho/DS-ES-2020-2-ConstruHelp/Backend/ConstruHelp/ConstruHelp/lib/txw2-2.3.1.jar"/>
 	<classpathentry kind="lib" path="D:/Downloads/Designer de Software/Trabalho/DS-ES-2020-2-ConstruHelp/Backend/ConstruHelp/ConstruHelp/lib/vibur-dbcp-25.0.jar"/>
 	<classpathentry kind="lib" path="D:/Downloads/Designer de Software/Trabalho/DS-ES-2020-2-ConstruHelp/Backend/ConstruHelp/ConstruHelp/lib/vibur-object-pool-25.0.jar"/>
+	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

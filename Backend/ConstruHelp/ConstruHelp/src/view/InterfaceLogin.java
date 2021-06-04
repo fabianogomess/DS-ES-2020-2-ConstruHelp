@@ -21,6 +21,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import java.awt.Label;
 import javax.swing.ImageIcon;
+import java.awt.Color;
+import java.awt.SystemColor;
+import java.awt.Insets;
 
 public class InterfaceLogin{
 
@@ -59,27 +62,32 @@ public class InterfaceLogin{
 		this.con = new ConnectionFactory().getConnection();
 		
 		frame = new JFrame();
+		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 673, 519);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Login");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblNewLabel.setBounds(204, 226, 104, 30);
+		JLabel lblNewLabel = new JLabel("CPF");
+		lblNewLabel.setForeground(new Color(90, 93, 169));
+		lblNewLabel.setFont(new Font("Alfa Slab One", Font.PLAIN, 14));
+		lblNewLabel.setBounds(181, 264, 104, 30);
 		frame.getContentPane().add(lblNewLabel);
 		
 		txtLogin = new JTextField();
 		txtLogin.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		txtLogin.setBounds(204, 266, 247, 30);
+		txtLogin.setBounds(181, 290, 294, 30);
 		frame.getContentPane().add(txtLogin);
 		txtLogin.setColumns(10);
 		
 		JLabel lblSenha = new JLabel("Senha");
-		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblSenha.setBounds(204, 306, 104, 30);
+		lblSenha.setForeground(new Color(90, 93, 169));
+		lblSenha.setFont(new Font("Alfa Slab One", Font.PLAIN, 14));
+		lblSenha.setBounds(181, 322, 104, 30);
 		frame.getContentPane().add(lblSenha);
 		
 		JButton btnNewButton = new JButton("Entrar");
+		btnNewButton.setForeground(Color.WHITE);
+		btnNewButton.setBackground(new Color(90, 93, 169));
 		btnNewButton.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
@@ -96,33 +104,35 @@ public class InterfaceLogin{
 				}
 		}
 		});
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnNewButton.setBounds(204, 407, 104, 30);
+		btnNewButton.setFont(new Font("Alfa Slab One", Font.PLAIN, 15));
+		btnNewButton.setBounds(181, 423, 95, 35);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnCadastrar = new JButton("Cadastrar");
+		btnCadastrar.setMargin(new Insets(2, 2, 2, 2));
+		btnCadastrar.setBackground(Color.WHITE);
+		btnCadastrar.setForeground(new Color(90, 93, 169));
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FormCadastro form = new FormCadastro();
 				form.setVisible(true);
 			}
 		});
-		btnCadastrar.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		btnCadastrar.setBounds(347, 407, 104, 30);
+		btnCadastrar.setFont(new Font("Alfa Slab One", Font.PLAIN, 15));
+		btnCadastrar.setBounds(380, 423, 95, 36);
 		frame.getContentPane().add(btnCadastrar);
 		
 		txtSenha = new JPasswordField();
-		txtSenha.setBounds(204, 346, 247, 34);
+		txtSenha.setBounds(181, 347, 294, 34);
 		frame.getContentPane().add(txtSenha);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\raul_\\git\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\download.png"));
-		lblNewLabel_1.setBounds(204, 10, 219, 206);
+		lblNewLabel_1.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo.png"));
+		lblNewLabel_1.setBounds(204, -13, 247, 245);
 		frame.getContentPane().add(lblNewLabel_1);
 	}
 	
 	public void setVisible() {
 		frame.setVisible(true);
 	}
-	
 }

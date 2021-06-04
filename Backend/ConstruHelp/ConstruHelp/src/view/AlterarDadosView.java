@@ -37,7 +37,7 @@ public class AlterarDadosView {
 
 	/**
 	 * Initialize the contents of the frame.
-	 */
+	 */ 
 	private void initialize() {
 		this.con = new ConnectionFactory().getConnection();
 		frame = new JFrame();
