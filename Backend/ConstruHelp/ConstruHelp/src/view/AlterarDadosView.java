@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import br.com.javatpoint.classes.Pessoa;
 import br.com.javatpoint.dao.UsuarioDAO;
 import br.com.javatpoint.factory.ConnectionFactory;
 
@@ -24,21 +25,21 @@ public class AlterarDadosView {
 	private JTextField NomeAlt;
 	private String cpf;
 	private Connection con;
+	private Pessoa pessoa;
 	/**
 	 * Launch the application.
 	 */
 	/**
 	 * Create the application.
 	 */
-	public AlterarDadosView(String cpfUsuario) {
-		initialize();
-		this.cpf = cpfUsuario;
+	public AlterarDadosView(Pessoa pessoa) {
+		initialize(pessoa);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(Pessoa pessoa) {
 		this.con = new ConnectionFactory().getConnection();
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
@@ -50,7 +51,7 @@ public class AlterarDadosView {
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("E-mail");
-		lblNewLabel_1.setBounds(33, 95, 45, 13);
+		lblNewLabel_1.setBounds(33, 106, 45, 13);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Senha");
@@ -70,32 +71,60 @@ public class AlterarDadosView {
 		senhaAlt = new JPasswordField();
 		senhaAlt.setBounds(33, 194, 96, 19);
 		frame.getContentPane().add(senhaAlt);
-
-		JButton btnSalvarAlt = new JButton("Salvar altera\u00E7\u00F5es");
-		btnSalvarAlt.addActionListener(new ActionListener() {
+		
+		JButton btnSalvarSenha = new JButton("Salvar senha");
+		btnSalvarSenha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				UsuarioDAO usuario = new UsuarioDAO();
 				try {
-					if(estaVazio(NomeAlt)) {
-						usuario.AlterarDadosNome(cpf, NomeAlt.getText());
-					}
-					if(estaVazio(EmailAlt)) {
-						usuario.AlterarDadosEmail(cpf, EmailAlt.getText());
-					}
 					if(estaVazio(senhaAlt)) {
-						usuario.AlterarDadosSenha(cpf, senhaAlt.getText());
+						usuario.AlterarDadosSenha(pessoa, senhaAlt.getText());
 					}
 					JOptionPane.showMessageDialog(null, "Dados alterados!");
 					frame.dispose();
 				}catch(Exception errorAlt) {
 					JOptionPane.showMessageDialog(null, "Erro durante alteração de dados!");
 				}
-				
-				
 			}
 		});
-		btnSalvarAlt.setBounds(262, 202, 111, 21);
-		frame.getContentPane().add(btnSalvarAlt);
+		btnSalvarSenha.setBounds(44, 223, 85, 21);
+		frame.getContentPane().add(btnSalvarSenha);
+		
+		JButton btnSalvarEmail = new JButton("Salvar email");
+		btnSalvarEmail.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UsuarioDAO usuario = new UsuarioDAO();
+				try {
+					if(estaVazio(EmailAlt)) {
+						usuario.AlterarDadosEmail(pessoa, EmailAlt.getText());
+					}
+					JOptionPane.showMessageDialog(null, "Dados alterados!");
+				frame.dispose();
+			}catch(Exception errorAlt) {
+				JOptionPane.showMessageDialog(null, "Erro durante alteração de dados!");
+			}
+			}
+		});
+		btnSalvarEmail.setBounds(43, 140, 85, 21);
+		frame.getContentPane().add(btnSalvarEmail);
+		
+		JButton btnSalvarNome = new JButton("Salvar nome");
+		btnSalvarNome.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UsuarioDAO usuario = new UsuarioDAO();
+				try {
+					if(estaVazio(NomeAlt)) {
+						usuario.AlterarDadosNome(pessoa, NomeAlt.getText());
+					}
+					JOptionPane.showMessageDialog(null, "Dados alterados!");
+					frame.dispose();
+				}catch(Exception errorAlt) {
+					JOptionPane.showMessageDialog(null, "Erro durante alteração de dados!");
+				}	
+			}
+		});
+		btnSalvarNome.setBounds(43, 76, 85, 21);
+		frame.getContentPane().add(btnSalvarNome);
 	}
 	
 	public void setVisible() {
@@ -105,5 +134,4 @@ public class AlterarDadosView {
 	public boolean estaVazio(JTextField campo) {
 		return campo.getText()!=null && !campo.getText().trim().isEmpty();		
 	}
-	
 }

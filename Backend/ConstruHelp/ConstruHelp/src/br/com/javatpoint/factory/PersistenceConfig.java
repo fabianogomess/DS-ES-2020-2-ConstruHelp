@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 public class PersistenceConfig {
-	
+	/*
 	private static final EntityManagerFactory entity = Persistence.createEntityManagerFactory("arq");
 
 	public static void main(String[] args) {
@@ -20,4 +20,6 @@ public class PersistenceConfig {
 		EntityManager entityManager = entity.createEntityManager();
 		entityManager.close();
 	}
+	*/
+
 }

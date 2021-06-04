@@ -119,11 +119,11 @@ public class FormCadastro extends JFrame{
 				pessoaNew.setSenha(txtSenhaCadst.getText());
 				pessoaNew.setCPF(txtCPFCadst.getText());
 				pessoaNew.setEmail(txtEmailCadst.getText());
-				usuario.adiciona(pessoaNew);
+				usuario.adicionaPessoa(pessoaNew);
 				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!!");
 				frame.dispose();
 			}catch (Exception erroCadastro) {
-				JOptionPane.showMessageDialog(null, "Erro no cadastro de usuário, coloque os dados novamente!!");
+				JOptionPane.showMessageDialog(null, erroCadastro);
 				frame.dispose();
 			}
 		}

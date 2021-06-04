@@ -1,40 +1,74 @@
 package br.com.javatpoint.classes;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import javax.xml.crypto.Data;
 
 @Entity
+@Table(name="projeto")
 public class Projeto {
+	
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="projeto_sequence")
+	@SequenceGenerator(name="projeto_sequence", sequenceName="proj_seq")
 	private long id;
 	@Column
     private String nomeProjeto;
 	@Column
     private String descricao;
 	@Column
-    private Data data;
-	@Column
     private String status;
 	
+	@OneToOne(mappedBy = "projeto", cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY, optional=false)
+	private Lista lista;
+	
+	@JoinTable(
+	name = "proj_gest",
+	joinColumns = @JoinColumn(name="id"),
+	inverseJoinColumns = @JoinColumn(name="gestor", referencedColumnName="cpf"))
+	@ManyToMany
+	private List<Gestor> gestores;
+	
+	@JoinTable(
+	name = "proj_fornecd",
+	joinColumns = @JoinColumn(name="id"),
+	inverseJoinColumns = @JoinColumn(name="fornecedor", referencedColumnName="cpf"))
+	@ManyToMany
+	private List<Fornecedor> fornecedores;
+	
 	@Embedded
-    private Endereco endereco;
+    public Endereco endereco;
+	
+	public Projeto() {
+	}
     
-
     public String getNomeProjeto(){
         return nomeProjeto;
     }
     public String getDescricao(){
         return descricao;
     }
-    public Data getData(){
-        return data;
-    }
+
     public String getStatus(){
         return status;
     }
@@ -45,56 +79,26 @@ public class Projeto {
     public void setDescricao(String descricao){
         this.descricao = descricao;
     }
-    public void setData(Data data){
-        this.data = data;
-    }
     public void setStatus(String status){
         this.status = status;
     }
-
-@Embeddable
-public class Endereco {
-	@Column
-    private String rua;
-	@Column
-    private String bairro;
-	@Column
-    private String complemento;
-	@Column
-    private String cidade;
-	@Column
-    private String estado;
     
-    public String getRua(){
-        return rua;
+    public Gestor getGestorPrincipal(Gestor A) {
+    	return gestores.get(0);
     }
-    public String getBairro(){
-        return bairro;
+    
+    public void setFornecedores(Fornecedor fornA) {
+    	fornecedores.add(fornA);
     }
-    public String getComplemento(){
-        return complemento;
+    
+    public void setGestores(Gestor A) {
+    	gestores.add(A);
     }
-    public String getCidade(){
-        return cidade;
-    }
-    public String getEstado(){
-        return estado;
+    
+   
+    
+    public long getID() {
+    	return this.id;
     }
 
-    public void setBairro(String bairro){
-        this.bairro = bairro;
-    }
-    public void setRua(String rua){
-        this.rua = rua;
-    }
-    public void setComplemento(String complemento){
-        this.complemento = complemento;
-    }
-    public void setCidade(String cidade){
-        this.cidade = cidade;
-    }
-    public void setEstado(String estado){
-        this.estado = estado;
-    }
-}
 }

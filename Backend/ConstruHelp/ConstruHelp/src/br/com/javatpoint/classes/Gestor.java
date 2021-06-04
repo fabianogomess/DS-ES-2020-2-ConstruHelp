@@ -1,22 +1,29 @@
 package br.com.javatpoint.classes;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
-@Table(name="Gestor")
 @PrimaryKeyJoinColumn(name="cpf")
+@OnDelete(action= OnDeleteAction.CASCADE)
 public class Gestor extends Pessoa{
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name="gestor_projeto", 
-	joinColumns= {@JoinColumn(name="gestor_id", referencedColumnName="cpf")}, 
-	inverseJoinColumns= {@JoinColumn(name="projeto_id", referencedColumnName="id")}) 
-	Projeto[] projetos = new Projeto[2];
-	
+	@ManyToMany(mappedBy = "gestores", cascade = CascadeType.ALL)
+	private List<Projeto> projetosGestor; 
+
+	public void adicionarProjeto(Projeto projeto) {
+		projetosGestor.add(projeto);
+	}
 }
