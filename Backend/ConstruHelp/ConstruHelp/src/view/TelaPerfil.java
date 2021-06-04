@@ -44,13 +44,9 @@ public class TelaPerfil {
 	private JPasswordField senhaPerfil;
 	private JTextField EmailPerfil;
 	private JTextField NomePerfil;
-	private String cpfPerfil;
-	private Connection con;
-	
-	
-	public TelaPerfil(String cpfUsuario) {
-		initialize();
-		this.cpfPerfil = cpfUsuario;
+	private Pessoa pessoa;
+	public TelaPerfil(Pessoa pessoa, JFrame TelaP) {
+		initialize(pessoa, TelaP);
 	}
 	
 	public void setVisible() {
@@ -59,9 +55,8 @@ public class TelaPerfil {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		
-		this.con = new ConnectionFactory().getConnection();
+	private void initialize(Pessoa pessoa, JFrame TelaP) {
+		this.pessoa = pessoa;
 		frame = new JFrame();
 		frame.getContentPane().setEnabled(false);
 		frame.getContentPane().setFocusTraversalPolicyProvider(true);
@@ -74,16 +69,19 @@ public class TelaPerfil {
 		ExcluirBtn.setBackground(Color.WHITE);
 		ExcluirBtn.setMargin(new Insets(2, 2, 2, 5));
 		ExcluirBtn.setForeground(new Color(90, 93, 169));
-		ExcluirBtn.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\ant-design_delete-outlined.png"));
+		ExcluirBtn.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\ant-design_delete-outlined.png"));
 		ExcluirBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int resp = JOptionPane.showConfirmDialog(null, "Deseja excluir seu cadastro?", "Excluir Cadastro", JOptionPane.YES_NO_OPTION);
 				if(resp == 0) {
 					UsuarioDAO usuario = new UsuarioDAO();
-					usuario.excluir(cpfPerfil);
+					usuario.excluir(pessoa);
+					TelaP.dispose();
 					frame.dispose();
 					InterfaceLogin login = new InterfaceLogin();
 					login.setVisible();
+				}else {
+					frame.dispose();
 				}
 			}
 		});
@@ -93,12 +91,12 @@ public class TelaPerfil {
 		
 		JButton AlterarDadosBtn = new JButton("<html>Alterar<br/>Dados</html>");
 		AlterarDadosBtn.setMargin(new Insets(2, 1, 2, 1));
-		AlterarDadosBtn.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\akar-icons_edit (2).png"));
+		AlterarDadosBtn.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\akar-icons_edit (2).png"));
 		AlterarDadosBtn.setBackground(new Color(90, 93, 169));
 		AlterarDadosBtn.setForeground(Color.WHITE);
 		AlterarDadosBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AlterarDadosView telaAlt = new AlterarDadosView(cpfPerfil);
+				AlterarDadosView telaAlt = new AlterarDadosView(pessoa);
 				telaAlt.setVisible();
 				
 			}
@@ -109,7 +107,7 @@ public class TelaPerfil {
 		
 		JLabel lblNewLabel_2 = new JLabel("logo");
 		lblNewLabel_2.setBounds(new Rectangle(10, 0, 0, 0));
-		lblNewLabel_2.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
 		lblNewLabel_2.setBounds(28, 11, 69, 66);
 		frame.getContentPane().add(lblNewLabel_2);
 		
@@ -142,10 +140,9 @@ public class TelaPerfil {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					frame.dispose();
-					con.close();
 					InterfaceLogin login = new InterfaceLogin();
 					login.setVisible();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					throw new RuntimeException(e1);
 				}
 			}
@@ -186,11 +183,6 @@ public class TelaPerfil {
 		canvas_2_1.setBackground(new Color(90, 93, 169));
 		canvas_2_1.setBounds(596, 11, 2, 25);
 		frame.getContentPane().add(canvas_2_1);
-		
-		JEditorPane editorPane = new JEditorPane();
-		editorPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		editorPane.setBounds(119, 269, 107, 20);
-		frame.getContentPane().add(editorPane);
 		
 	}
 

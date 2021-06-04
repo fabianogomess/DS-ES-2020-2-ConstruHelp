@@ -152,11 +152,11 @@ public class FormCadastro extends JFrame{
 				pessoaNew.setSenha(txtSenhaCadst.getText());
 				pessoaNew.setCPF(txtCPFCadst.getText());
 				pessoaNew.setEmail(txtEmailCadst.getText());
-				usuario.adiciona(pessoaNew);
+				usuario.adicionaPessoa(pessoaNew);
 				JOptionPane.showMessageDialog(null, "Cadastrado com sucesso!!");
 				frame.dispose();
 			}catch (Exception erroCadastro) {
-				JOptionPane.showMessageDialog(null, "Erro no cadastro de usuário, coloque os dados novamente!!");
+				JOptionPane.showMessageDialog(null, erroCadastro);
 				frame.dispose();
 			}
 		}
@@ -173,7 +173,7 @@ public class FormCadastro extends JFrame{
 		frame.getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
 		lblNewLabel_2.setBounds(10, 7, 71, 66);
 		frame.getContentPane().add(lblNewLabel_2);
 		

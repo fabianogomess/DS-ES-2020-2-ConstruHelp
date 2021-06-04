@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import java.awt.Font;
 import javax.swing.JTextField;
 
+import br.com.javatpoint.classes.Pessoa;
 import br.com.javatpoint.dao.UsuarioDAO;
 import br.com.javatpoint.factory.ConnectionFactory;
 
@@ -30,8 +31,6 @@ public class InterfaceLogin{
 	private JFrame frame;
 	private JTextField txtLogin;
 	private JPasswordField txtSenha;
-	private Connection con;
-
 	/**
 	 * Launch the application.
 	 */
@@ -59,8 +58,6 @@ public class InterfaceLogin{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		this.con = new ConnectionFactory().getConnection();
-		
 		frame = new JFrame();
 		frame.getContentPane().setBackground(Color.WHITE);
 		frame.setBounds(100, 100, 673, 519);
@@ -92,12 +89,15 @@ public class InterfaceLogin{
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				UsuarioDAO usuario = new UsuarioDAO();
-				boolean autentifica = usuario.Login(txtLogin.getText(), txtSenha.getText());
+				Pessoa pessoa = new Pessoa();
+				pessoa.setCPF(txtLogin.getText());
+				pessoa.setSenha(txtSenha.getText());
+				boolean autentifica = usuario.Login(pessoa, txtSenha.getText());
 				if(autentifica == true) {
 				JOptionPane.showInternalMessageDialog(null, "Autenticado com sucesso!!");
 				frame.dispose();
-				String cpfUsuario = usuario.cpfRetornado(txtLogin.getText(), txtSenha.getText());
-				TelaPrincipal tela = new TelaPrincipal(cpfUsuario);
+				pessoa = usuario.retorno(pessoa, autentifica);
+				TelaPrincipal tela = new TelaPrincipal(pessoa);
 				tela.setVisible(true);
 				}else {
 				JOptionPane.showInternalMessageDialog(null, "Dados incorretos!");
@@ -127,7 +127,7 @@ public class InterfaceLogin{
 		frame.getContentPane().add(txtSenha);
 		
 		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo.png"));
+		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo.png"));
 		lblNewLabel_1.setBounds(204, -13, 247, 245);
 		frame.getContentPane().add(lblNewLabel_1);
 	}

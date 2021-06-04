@@ -1,123 +1,145 @@
 package br.com.javatpoint.dao;
 import java.sql.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import br.com.javatpoint.classes.*;
 import br.com.javatpoint.factory.ConnectionFactory;
 
 public class UsuarioDAO {
-	private Connection con;
 	
-	public UsuarioDAO() {
-		this.con = new ConnectionFactory().getConnection();
+	private static UsuarioDAO instance;
+	protected EntityManager bd;
+	public static UsuarioDAO getInstance() {
+		if(instance == null) {
+			instance = new UsuarioDAO();
+		}
+	return instance;
 	}
 	
-	public void adiciona(Pessoa pessoa) {
-		String sql = "INSERT INTO pessoa(nome, senha, cpf, email) VALUES(?,?,?,?)";
-		
+	public UsuarioDAO() {
+		bd = getEntityManager();
+	}
+	
+	private EntityManager getEntityManager() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("arq");
+		if(bd == null) {
+			bd = factory.createEntityManager();
+		}
+		return bd;
+	}
+
+	public void adicionaPessoa(Pessoa pessoa) {
 		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setString(1, pessoa.getNome());
-			stmt.setString(2, pessoa.getSenha());
-			stmt.setString(3, pessoa.getCPF());
-			stmt.setString(4, pessoa.getEmail());
-			
-			stmt.execute();
-			stmt.close();
-		}catch(SQLException e) {
-			throw new RuntimeException(e);
+			if(!bd.getTransaction().isActive()) {
+				bd.getTransaction().begin();
+			}
+			bd.merge(pessoa);
+			bd.getTransaction().commit();
+			bd.close();
+		}catch(Exception e) {
+			e.printStackTrace();
+			bd.getTransaction().rollback();
 		}
 	}
 	
-	public void excluir(String cpfA) {
-		String sql = "DELETE FROM pessoa WHERE cpf = ?";
+	public boolean Login(Pessoa pessoa, String senha) {
 		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setString(1, cpfA);
-			stmt.execute();
-			stmt.close();
-		}catch(SQLException exclusao) {
+			if(!bd.getTransaction().isActive()) {
+				bd.getTransaction().begin();
+			}
+			pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+			if(pessoa != null) {
+			boolean autentifica = false;
+			if(pessoa.getSenha().equals(senha)) {
+					autentifica = true;
+					return autentifica;
+				}	
+			}
+			bd.getTransaction().commit();
+			bd.close();
+	}catch(Exception loginError) {
+		throw new RuntimeException(loginError);
+	}
+		return false;
+}
+	
+	public Pessoa retorno(Pessoa pessoa, boolean b) {
+		try {
+			if(!bd.getTransaction().isActive()) {
+			bd.getTransaction().begin();
+			}
+			pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+			bd.getTransaction().commit();
+			bd.close();
+			return pessoa;
+		}catch(Exception err) {
+			throw new RuntimeException(err);
+		}
+	}
+	
+	
+	public void excluir(Pessoa pessoa) {
+		
+		try {
+			if(!bd.getTransaction().isActive()) {
+				bd.getTransaction().begin();
+			}
+			pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+			bd.remove(pessoa);
+			bd.getTransaction().commit();
+			bd.close();
+		}catch(Exception exclusao) {
 			throw new RuntimeException(exclusao);
 		}
 	}
 	
-	public String cpfRetornado(String emailA, String senhaA) {
-		String sql = "SELECT cpf FROM pessoa WHERE email = ? and senha = ?";
-		String retorno = "";
+	public void AlterarDadosNome(Pessoa pessoa, String nome) {
 		try {
-			PreparedStatement stmt = con.prepareStatement(sql);
-			stmt.setString(1, emailA);
-			stmt.setString(2, senhaA);
-			try (ResultSet rs = stmt.executeQuery()){
-				if(rs.next()) {
-					retorno = rs.getString(1);
-				}
+		if(!bd.getTransaction().isActive()) {
+			bd.getTransaction().begin();
+		}
+		pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+		pessoa.setNome(nome);
+		bd.merge(pessoa);
+		bd.getTransaction().commit();
+		bd.close();
+		}catch(Exception errorConsulta) {
+			throw new RuntimeException(errorConsulta);
+		}
+	}
+	
+	public void AlterarDadosEmail(Pessoa pessoa, String email) {
+		try {
+			if(!bd.getTransaction().isActive()) {
+				bd.getTransaction().begin();
 			}
-			stmt.setString(1, retorno);
-		}catch(SQLException erroCPF) {
-			throw new RuntimeException(erroCPF);
-		}
-		return retorno;
-	}
-	
-	public boolean Login(String emailA, String senhaA) {
-		try {
-		String sql = "SELECT email, senha FROM pessoa WHERE email = ? and senha = ?";
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, emailA);
-		stmt.setString(2, senhaA);
-		ResultSet rs = stmt.executeQuery();
-		boolean autentifica = false;
-		
-		while(rs.next() && !autentifica) {
-			if(rs.getString("email").equals(emailA)) {
-				if(rs.getString("senha").equals(senhaA)) {
-					autentifica = true;
-				}	
+			pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+			pessoa.setEmail(email);
+			bd.merge(pessoa);
+			bd.getTransaction().commit();
+			bd.close();
+			}catch(Exception errorConsulta) {
+				throw new RuntimeException(errorConsulta);
 			}
-		}
-		return autentifica;
-	}catch(SQLException loginError) {
-		throw new RuntimeException(loginError);
-	}
 	}
 	
-	public void AlterarDadosNome(String cpfA, String nomeA) {
-		String sql = "UPDATE pessoa SET nome = ? WHERE cpf=?";
+	public void AlterarDadosSenha(Pessoa pessoa, String senha) {
 		try {
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, nomeA);
-		stmt.setString(2, cpfA);
-		stmt.execute();
-		stmt.close();	
-		}catch(Exception errorConsulta) {
-			throw new RuntimeException(errorConsulta);
-		}
-	}
-	
-	public void AlterarDadosEmail(String cpfA, String emailA) {
-		String sql = "UPDATE pessoa SET email = ? WHERE cpf=?";
-		try {
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, emailA);
-		stmt.setString(2, cpfA);
-		stmt.execute();
-		stmt.close();	
-		}catch(Exception errorConsulta) {
-			throw new RuntimeException(errorConsulta);
-		}
-	}
-	
-	public void AlterarDadosSenha(String cpfA, String senhaA) {
-		String sql = "UPDATE pessoa SET senha = ? WHERE cpf=?";
-		try {
-		PreparedStatement stmt = con.prepareStatement(sql);
-		stmt.setString(1, senhaA);
-		stmt.setString(2, cpfA);
-		stmt.execute();
-		stmt.close();	
-		}catch(Exception errorConsulta) {
-			throw new RuntimeException(errorConsulta);
-		}
-	}
+			if(!bd.getTransaction().isActive()) {
+				bd.getTransaction().begin();
+			}
+			pessoa = bd.find(Pessoa.class, pessoa.getCPF());
+			pessoa.setSenha(senha);
+			bd.merge(pessoa);
+			bd.getTransaction().commit();
+			bd.close();
+			}catch(Exception errorConsulta) {
+				throw new RuntimeException(errorConsulta);
+			}
+		}	
 
-}
+	}
+	

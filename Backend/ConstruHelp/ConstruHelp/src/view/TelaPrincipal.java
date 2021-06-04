@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import br.com.javatpoint.classes.Pessoa;
 import br.com.javatpoint.dao.UsuarioDAO;
 import br.com.javatpoint.factory.ConnectionFactory;
 
@@ -40,19 +41,17 @@ public class TelaPrincipal {
 	/**
 	 * Create the application.
 	 */
-	private String cpfUsuario;
+	private Pessoa pessoa;
 	private Connection con;
-	public TelaPrincipal(String cpf) {
-		initialize();
-		this.cpfUsuario = cpf;
+	public TelaPrincipal(Pessoa pessoa) {
+		initialize(pessoa);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
-		
-		this.con = new ConnectionFactory().getConnection();
+	private void initialize(Pessoa pessoa) {
+		this.pessoa = pessoa;
 		frame = new JFrame();
 		frame.getContentPane().setEnabled(false);
 		frame.getContentPane().setFocusTraversalPolicyProvider(true);
@@ -86,11 +85,11 @@ public class TelaPrincipal {
 		
 		JLabel lblNewLabel_2 = new JLabel("logo");
 		lblNewLabel_2.setBounds(new Rectangle(10, 0, 0, 0));
-		lblNewLabel_2.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
+		lblNewLabel_2.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\logo (2).png"));
 		lblNewLabel_2.setBounds(28, 11, 69, 66);
 		frame.getContentPane().add(lblNewLabel_2);
 		
-		JButton btnNewButton_3 = new JButton("Projetos");
+		JButton btnNewButton_3 = new JButton("/Projetos/");
 		btnNewButton_3.setMargin(new Insets(2, 2, 2, 2));
 		btnNewButton_3.setForeground(new Color(90, 93, 169));
 		btnNewButton_3.setFont(new Font("Alfa Slab One", Font.PLAIN, 14));
@@ -101,11 +100,7 @@ public class TelaPrincipal {
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					frame.dispose();
-					con.close();
-					InterfaceLogin login = new InterfaceLogin();
-					login.setVisible();
-				} catch (SQLException e1) {
+				} catch (Exception e1) {
 					throw new RuntimeException(e1);
 				}
 			}
@@ -124,7 +119,7 @@ public class TelaPrincipal {
 		btnNewButton_1.setBorderPainted(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TelaPerfil novatela = new TelaPerfil(cpfUsuario);
+				TelaPerfil novatela = new TelaPerfil(pessoa, frame);
 				novatela.setVisible();
 			}
 		});
@@ -135,9 +130,11 @@ public class TelaPrincipal {
 		btnNewButton_2.setMargin(new Insets(2, 5, 2, 5));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ProjetosPagina telaProjeto = new ProjetosPagina(pessoa);
+				telaProjeto.setVisible(true);
 			}
 		});
-		btnNewButton_2.setIcon(new ImageIcon("D:\\Downloads\\Designer de Software\\Trabalho\\DS-ES-2020-2-ConstruHelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\fluent_document-add-16-regular.png"));
+		btnNewButton_2.setIcon(new ImageIcon("C:\\Users\\raul_\\eclipse-workspace\\NovoTeste\\construhelp\\Backend\\ConstruHelp\\ConstruHelp\\img\\fluent_document-add-16-regular.png"));
 		btnNewButton_2.setFont(new Font("Alfa Slab One", Font.PLAIN, 12));
 		btnNewButton_2.setBackground(new Color(90, 93, 169));
 		btnNewButton_2.setForeground(Color.WHITE);

@@ -2,7 +2,9 @@ package br.com.javatpoint.factory;
 
 	import java.sql.Connection; 
 import java.sql.DriverManager; 
-import java.sql.SQLException; 
+import java.sql.SQLException;
+
+import javax.persistence.EntityManager; 
 	public class ConnectionFactory {
 	public Connection con;
 	public Connection getConnection() {
@@ -13,4 +15,5 @@ import java.sql.SQLException;
 			throw new RuntimeException(excecao);
 		 }
 	}
+	
 }
